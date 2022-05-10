@@ -12,8 +12,11 @@ namespace GameOfLifePortfolio
 {
     public partial class Form1 : Form
     {
-        // The universe array
-        bool[,] universe = new bool[5, 5];
+        bool[,] universe = new bool[20, 20];
+        bool[,] scratchPad = new bool[20, 20];
+
+       
+       
 
         // Drawing colors
         Color gridColor = Color.Black;
@@ -32,19 +35,72 @@ namespace GameOfLifePortfolio
             // Setup the timer
             timer.Interval = 100; // milliseconds
             timer.Tick += Timer_Tick;
-            timer.Enabled = true; // start timer running
+            timer.Enabled = false; // start timer running
         }
 
         // Calculate the next generation of cells
         private void NextGeneration()
         {
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+
+                    // int count = CountNeighborsFinite(x, y);
+
+                    int count = CountNeighborsToroidal(x, y);
+
+                    //Apply the rules
+
+                   if(universe[x,y] == true)
+                   {
+                        
+                        if(count < 2 || count > 3)
+                        {
+                            scratchPad[x, y] = false;
+                        }
+                        else
+                        {
+                            scratchPad[x, y] = true;
+                        }
+
+                   }
+                    else
+                    {
+                        if(count == 3)
+                        {
+                            scratchPad[x, y] = true;
+
+                        }
+                        else
+                        {
+                            scratchPad[x, y] = false;
+                        }
+                    }
 
 
+                    //Turn it on/off in the scratchpad
+
+                   
+
+                }
+
+                graphicsPanel1.Invalidate();
+            }
+
+            //Copy from scratchPad to universe. Code is in Miscellaneous How tos
+                    bool[,] temp = universe;
+                    universe = scratchPad;
+                    scratchPad = temp;
             // Increment generation count
             generations++;
 
             // Update status strip generations
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+
+            //Add invalidate here
+
         }
 
         // The event called by the timer every Interval milliseconds.
@@ -55,6 +111,9 @@ namespace GameOfLifePortfolio
 
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
+            //FLOATS! MAKES THE PROGRAM LOOK A LOT BETTER
+
+
             // Calculate the width and height of each cell in pixels
             // CELL WIDTH = WINDOW WIDTH / NUMBER OF CELLS IN X
             int cellWidth = graphicsPanel1.ClientSize.Width / universe.GetLength(0);
@@ -74,6 +133,9 @@ namespace GameOfLifePortfolio
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
                     // A rectangle to represent each cell in pixels
+
+                    //RectangleF ---> converts to float
+
                     Rectangle cellRect = Rectangle.Empty;
                     cellRect.X = x * cellWidth;
                     cellRect.Y = y * cellHeight;
@@ -88,8 +150,30 @@ namespace GameOfLifePortfolio
 
                     // Outline the cell with a pen
                     e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+
+                    Rectangle rect = new Rectangle(cellRect.X, cellRect.Y,cellRect.Width , cellRect.Height);
+
+                    Font font = new Font("Arial", 13f);
+
+                    StringFormat stringFormat = new StringFormat();
+
+                    stringFormat.Alignment = StringAlignment.Center;
+
+                    stringFormat.LineAlignment = StringAlignment.Center;
+
+                   int temp = CountNeighborsFinite(x, y);
+
+                    if(temp != 0)
+                    { 
+                        e.Graphics.DrawString(temp.ToString(), font, Brushes.Blue, rect,stringFormat);
+
+                    }
+                    temp = 0;
+
                 }
             }
+
+            
 
             // Cleaning up pens and brushes
             gridPen.Dispose();
@@ -101,6 +185,7 @@ namespace GameOfLifePortfolio
             // If the left mouse button was clicked
             if (e.Button == MouseButtons.Left)
             {
+                //FLOATS
                 // Calculate the width and height of each cell in pixels
                 int cellWidth = graphicsPanel1.ClientSize.Width / universe.GetLength(0);
                 int cellHeight = graphicsPanel1.ClientSize.Height / universe.GetLength(1);
@@ -116,6 +201,146 @@ namespace GameOfLifePortfolio
 
                 // Tell Windows you need to repaint
                 graphicsPanel1.Invalidate();
+            }
+        }
+
+        private int CountNeighborsToroidal(int x, int y)
+        {
+            int count = 0;
+            int xLen = universe.GetLength(0);
+            int yLen = universe.GetLength(1);
+
+            for (int yOffset = -1; yOffset <= 1; yOffset++)
+            {
+                for (int xOffset = -1; xOffset <= 1; xOffset++)
+                {
+                    int xCheck = x + xOffset;
+                    int yCheck = y + yOffset;
+
+
+                    // if xOffset and yOffset are both equal to 0 then continue
+
+                    if(xOffset == 0 && yOffset == 0)
+                    {
+                        continue;
+                    }
+
+                    // if xCheck is less than 0 then set to xLen - 1
+                    if(xCheck < 0)
+                    {
+                        xCheck = xLen - 1;
+                    }
+
+                    // if yCheck is less than 0 then set to yLen - 1
+
+                    if(yCheck < 0)
+                    {
+                        yCheck = yLen - 1;
+
+                    }
+
+
+                    // if xCheck is greater than or equal too xLen then set to 0
+                    if(xCheck >= xLen)
+                    {
+                        xCheck = 0;
+                    }
+
+                    // if yCheck is greater than or equal too yLen then set to 0
+                    if(yCheck >= yLen)
+                    {
+                        yCheck = 0;
+                    }
+
+
+                    if (universe[xCheck, yCheck] == true) count++;
+                }
+            }
+            return count;
+        }
+
+        private int CountNeighborsFinite(int x, int y)
+        {
+            int count = 0;
+            int xLen = universe.GetLength(0);
+            int yLen = universe.GetLength(1);
+            for (int yOffset = -1; yOffset <= 1; yOffset++)
+            {
+                for (int xOffset = -1; xOffset <= 1; xOffset++)
+                {
+                    int xCheck = x + xOffset;
+                    int yCheck = y + yOffset;
+                    // if xOffset and yOffset are both equal to 0 then continue
+
+                    if(xOffset == 0 && yOffset == 0)
+                    {
+                        continue;
+                    }
+                    // if xCheck is less than 0 then continue
+
+                    if(xCheck < 0)
+                    {
+                        continue;
+                    }
+                    // if yCheck is less than 0 then continue
+                    if(yCheck < 0)
+                    {
+                        continue;
+                    }
+
+                    // if xCheck is greater than or equal too xLen then continue
+                    if(xCheck >= xLen)
+                    {
+                        continue;
+                    }
+                    // if yCheck is greater than or equal too yLen then continue
+                    if(yCheck >= yLen)
+                    {
+                        continue;
+                    }
+
+                    if (universe[xCheck, yCheck] == true) count++;
+                }
+            }
+            return count;
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        //Next Generation on click
+      
+
+        private void PlayButton_Click(object sender, EventArgs e)
+        {
+            timer.Enabled = true;
+        }
+
+        private void NextGenButton_Click(object sender, EventArgs e)
+        {
+            NextGeneration();
+        }
+
+        private void PauseButton_Click(object sender, EventArgs e)
+        {
+            timer.Enabled = false;
+        }
+
+        private void newToolStripButton_Click(object sender, EventArgs e)
+        {
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    universe[x, y] = false;
+                    generations = 0;
+                    timer.Enabled = false;
+                    toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+                    graphicsPanel1.Invalidate();
+                }
             }
         }
     }
