@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +16,8 @@ namespace GameOfLifePortfolio
         bool[,] universe = new bool[20, 20];
         bool[,] scratchPad = new bool[20, 20];
 
-       
-       
+
+
 
         // Drawing colors
         Color gridColor = Color.Black;
@@ -53,10 +54,10 @@ namespace GameOfLifePortfolio
 
                     //Apply the rules
 
-                   if(universe[x,y] == true)
-                   {
-                        
-                        if(count < 2 || count > 3)
+                    if (universe[x, y] == true)
+                    {
+
+                        if (count < 2 || count > 3)
                         {
                             scratchPad[x, y] = false;
                         }
@@ -65,10 +66,10 @@ namespace GameOfLifePortfolio
                             scratchPad[x, y] = true;
                         }
 
-                   }
+                    }
                     else
                     {
-                        if(count == 3)
+                        if (count == 3)
                         {
                             scratchPad[x, y] = true;
 
@@ -82,17 +83,17 @@ namespace GameOfLifePortfolio
 
                     //Turn it on/off in the scratchpad
 
-                   
+
 
                 }
 
-                graphicsPanel1.Invalidate();
+
             }
 
             //Copy from scratchPad to universe. Code is in Miscellaneous How tos
-                    bool[,] temp = universe;
-                    universe = scratchPad;
-                    scratchPad = temp;
+            bool[,] temp = universe;
+            universe = scratchPad;
+            scratchPad = temp;
             // Increment generation count
             generations++;
 
@@ -100,7 +101,7 @@ namespace GameOfLifePortfolio
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
 
             //Add invalidate here
-
+            graphicsPanel1.Invalidate();
         }
 
         // The event called by the timer every Interval milliseconds.
@@ -151,7 +152,7 @@ namespace GameOfLifePortfolio
                     // Outline the cell with a pen
                     e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
 
-                    Rectangle rect = new Rectangle(cellRect.X, cellRect.Y,cellRect.Width , cellRect.Height);
+                    Rectangle rect = new Rectangle(cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
 
                     Font font = new Font("Arial", 13f);
 
@@ -161,11 +162,11 @@ namespace GameOfLifePortfolio
 
                     stringFormat.LineAlignment = StringAlignment.Center;
 
-                   int temp = CountNeighborsFinite(x, y);
+                    int temp = CountNeighborsFinite(x, y);
 
-                    if(temp != 0)
-                    { 
-                        e.Graphics.DrawString(temp.ToString(), font, Brushes.Blue, rect,stringFormat);
+                    if (temp != 0)
+                    {
+                        e.Graphics.DrawString(temp.ToString(), font, Brushes.Blue, rect, stringFormat);
 
                     }
                     temp = 0;
@@ -173,7 +174,7 @@ namespace GameOfLifePortfolio
                 }
             }
 
-            
+
 
             // Cleaning up pens and brushes
             gridPen.Dispose();
@@ -220,20 +221,20 @@ namespace GameOfLifePortfolio
 
                     // if xOffset and yOffset are both equal to 0 then continue
 
-                    if(xOffset == 0 && yOffset == 0)
+                    if (xOffset == 0 && yOffset == 0)
                     {
                         continue;
                     }
 
                     // if xCheck is less than 0 then set to xLen - 1
-                    if(xCheck < 0)
+                    if (xCheck < 0)
                     {
                         xCheck = xLen - 1;
                     }
 
                     // if yCheck is less than 0 then set to yLen - 1
 
-                    if(yCheck < 0)
+                    if (yCheck < 0)
                     {
                         yCheck = yLen - 1;
 
@@ -241,13 +242,13 @@ namespace GameOfLifePortfolio
 
 
                     // if xCheck is greater than or equal too xLen then set to 0
-                    if(xCheck >= xLen)
+                    if (xCheck >= xLen)
                     {
                         xCheck = 0;
                     }
 
                     // if yCheck is greater than or equal too yLen then set to 0
-                    if(yCheck >= yLen)
+                    if (yCheck >= yLen)
                     {
                         yCheck = 0;
                     }
@@ -272,29 +273,29 @@ namespace GameOfLifePortfolio
                     int yCheck = y + yOffset;
                     // if xOffset and yOffset are both equal to 0 then continue
 
-                    if(xOffset == 0 && yOffset == 0)
+                    if (xOffset == 0 && yOffset == 0)
                     {
                         continue;
                     }
                     // if xCheck is less than 0 then continue
 
-                    if(xCheck < 0)
+                    if (xCheck < 0)
                     {
                         continue;
                     }
                     // if yCheck is less than 0 then continue
-                    if(yCheck < 0)
+                    if (yCheck < 0)
                     {
                         continue;
                     }
 
                     // if xCheck is greater than or equal too xLen then continue
-                    if(xCheck >= xLen)
+                    if (xCheck >= xLen)
                     {
                         continue;
                     }
                     // if yCheck is greater than or equal too yLen then continue
-                    if(yCheck >= yLen)
+                    if (yCheck >= yLen)
                     {
                         continue;
                     }
@@ -311,7 +312,7 @@ namespace GameOfLifePortfolio
         }
 
         //Next Generation on click
-      
+
 
         private void PlayButton_Click(object sender, EventArgs e)
         {
@@ -342,6 +343,220 @@ namespace GameOfLifePortfolio
                     graphicsPanel1.Invalidate();
                 }
             }
+        }
+
+        private void LoadFile()
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Filter = "All Files|*.*|Cells|*.cells";
+            dlg.FilterIndex = 2;
+
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                StreamReader reader = new StreamReader(dlg.FileName);
+
+                // Create a couple variables to calculate the width and height
+                // of the data in the file.
+                int maxWidth = 0;
+                int maxHeight = 0;
+
+                // Iterate through the file once to get its size.
+                while (!reader.EndOfStream)
+                {
+                    // Read one row at a time.
+                    string row = reader.ReadLine();
+
+                    // If the row begins with '!' then it is a comment
+                    // and should be ignored.
+                    if (row[0] == '!')
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        maxWidth = row.Length;
+
+                        maxHeight++;
+                    }
+
+                    // If the row is not a comment then it is a row of cells.
+                    // Increment the maxHeight variable for each row read.
+
+                    // Get the length of the current row string
+                    // and adjust the maxWidth variable if necessary.
+                }
+
+                // Resize the current universe and scratchPad
+                // to the width and height of the file calculated above.
+                bool[,] newUniverse = new bool[maxWidth, maxHeight];
+
+                // Reset the file pointer back to the beginning of the file.
+                reader.BaseStream.Seek(0, SeekOrigin.Begin);
+                int yPos = 0;
+
+                // Iterate through the file again, this time reading in the cells.
+                while (!reader.EndOfStream)
+                {
+                    // Read one row at a time.
+                    string row = reader.ReadLine();
+
+
+                    // If the row begins with '!' then
+                    // it is a comment and should be ignored.
+                    if (row[0] == '!')
+                    {
+                        continue;
+                    }
+                    else
+                    {
+
+                        // If the row is not a comment then 
+                        // it is a row of cells and needs to be iterated through.
+                        for (int xPos = 0; xPos < row.Length; xPos++)
+                        {
+                            // If row[xPos] is a 'O' (capital O) then
+                            // set the corresponding cell in the universe to alive.
+
+                            if (row[xPos] == 'O')
+                            {
+                                universe[xPos, yPos] = true;
+                            }
+                            // If row[xPos] is a '.' (period) then
+                            // set the corresponding cell in the universe to dead.
+
+                            else if (row[xPos] == '.')
+                            {
+                                universe[xPos, yPos] = false;
+                            }
+
+
+                        }
+                    }
+
+
+                    yPos++;
+                }
+
+                universe = newUniverse;
+
+                // Close the file.
+                reader.Close();
+            }
+        }
+
+
+        private void saveToolStripButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "All Files|*.*|Cells|*.cells";
+            dlg.FilterIndex = 2; dlg.DefaultExt = "cells";
+
+
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                StreamWriter writer = new StreamWriter(dlg.FileName);
+
+                // Write any comments you want to include first.
+                // Prefix all comment strings with an exclamation point.
+                // Use WriteLine to write the strings to the file. 
+                // It appends a CRLF for you.
+                writer.WriteLine("!This is my comment.");
+
+                // Iterate through the universe one row at a time.
+                for (int y = 0; y < universe.GetLength(1); y++) //Height
+                {
+                    // Create a string to represent the current row.
+                    String currentRow = string.Empty;
+
+                    // Iterate through the current row one cell at a time.
+                    for (int x = 0; x < universe.GetLength(0); x++) //width
+                    {
+                        // If the universe[x,y] is alive then append 'O' (capital O)
+                        // to the row string.
+
+                        if (universe[x, y] == true)
+                        {
+                            currentRow += 'O';
+                        }
+                        // Else if the universe[x,y] is dead then append '.' (period)
+                        // to the row string.
+                        else
+                        {
+                            currentRow += '.';
+                        }
+
+
+                    }
+
+                    // Once the current row has been read through and the 
+                    // string constructed then write it to the file using WriteLine.
+
+                    writer.WriteLine(currentRow);
+                }
+
+                // After all rows and columns have been written then close the file.
+                writer.Close();
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "All Files|*.*|Cells|*.cells";
+            dlg.FilterIndex = 2; dlg.DefaultExt = "cells";
+
+
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                StreamWriter writer = new StreamWriter(dlg.FileName);
+
+                // Write any comments you want to include first.
+                // Prefix all comment strings with an exclamation point.
+                // Use WriteLine to write the strings to the file. 
+                // It appends a CRLF for you.
+                writer.WriteLine("!This is my comment.");
+
+                // Iterate through the universe one row at a time.
+                for (int y = 0; y < universe.GetLength(1); y++) //Height
+                {
+                    // Create a string to represent the current row.
+                    String currentRow = string.Empty;
+
+                    // Iterate through the current row one cell at a time.
+                    for (int x = 0; x < universe.GetLength(0); x++) //width
+                    {
+                        // If the universe[x,y] is alive then append 'O' (capital O)
+                        // to the row string.
+
+                        if (universe[x, y] == true)
+                        {
+                            currentRow += 'O';
+                        }
+                        // Else if the universe[x,y] is dead then append '.' (period)
+                        // to the row string.
+                        else
+                        {
+                            currentRow += '.';
+                        }
+
+
+                    }
+
+                    // Once the current row has been read through and the 
+                    // string constructed then write it to the file using WriteLine.
+
+                    writer.WriteLine(currentRow);
+                }
+
+                // After all rows and columns have been written then close the file.
+                writer.Close();
+            }
+        } //Functions as a SaveAs. needs to be just a save
+
+        private void openToolStripButton_Click(object sender, EventArgs e)
+        {
+            LoadFile();
+            graphicsPanel1.Invalidate();
         }
     }
 }
