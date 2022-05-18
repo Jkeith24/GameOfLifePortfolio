@@ -340,9 +340,11 @@ namespace GameOfLifePortfolio
                     generations = 0;
                     timer.Enabled = false;
                     toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
-                    graphicsPanel1.Invalidate();
+
                 }
             }
+
+            graphicsPanel1.Invalidate();
         }
 
         private void LoadFile()
@@ -353,6 +355,7 @@ namespace GameOfLifePortfolio
 
             if (DialogResult.OK == dlg.ShowDialog())
             {
+                CurrentFile = dlg.FileName;
                 StreamReader reader = new StreamReader(dlg.FileName);
 
                 // Create a couple variables to calculate the width and height
@@ -419,14 +422,14 @@ namespace GameOfLifePortfolio
 
                             if (row[xPos] == 'O')
                             {
-                                universe[xPos, yPos] = true;
+                                newUniverse[xPos, yPos] = true;
                             }
                             // If row[xPos] is a '.' (period) then
                             // set the corresponding cell in the universe to dead.
 
                             else if (row[xPos] == '.')
                             {
-                                universe[xPos, yPos] = false;
+                                newUniverse[xPos, yPos] = false;
                             }
 
 
@@ -438,6 +441,7 @@ namespace GameOfLifePortfolio
                 }
 
                 universe = newUniverse;
+                graphicsPanel1.Invalidate();
 
                 // Close the file.
                 reader.Close();
@@ -447,20 +451,15 @@ namespace GameOfLifePortfolio
 
         private void saveToolStripButton_Click(object sender, EventArgs e)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.Filter = "All Files|*.*|Cells|*.cells";
-            dlg.FilterIndex = 2; dlg.DefaultExt = "cells";
-
-
-            if (DialogResult.OK == dlg.ShowDialog())
+            if (File.Exists(CurrentFile))
             {
-                StreamWriter writer = new StreamWriter(dlg.FileName);
+                StreamWriter writer = new StreamWriter(CurrentFile);
 
                 // Write any comments you want to include first.
                 // Prefix all comment strings with an exclamation point.
                 // Use WriteLine to write the strings to the file. 
                 // It appends a CRLF for you.
-                writer.WriteLine("!This is my comment.");
+                writer.WriteLine("!HAVE A GREAT DAY!");
 
                 // Iterate through the universe one row at a time.
                 for (int y = 0; y < universe.GetLength(1); y++) //Height
@@ -496,25 +495,77 @@ namespace GameOfLifePortfolio
 
                 // After all rows and columns have been written then close the file.
                 writer.Close();
+
+            }
+            else
+            {
+                SaveFileDialog dlg = new SaveFileDialog();
+                dlg.Filter = "All Files|*.*|Cells|*.cells";
+                dlg.FilterIndex = 2; dlg.DefaultExt = "cells";
+                if (DialogResult.OK == dlg.ShowDialog())
+                {
+                    CurrentFile = dlg.FileName;
+                    StreamWriter writer = new StreamWriter(dlg.FileName);
+
+                    // Write any comments you want to include first.
+                    // Prefix all comment strings with an exclamation point.
+                    // Use WriteLine to write the strings to the file. 
+                    // It appends a CRLF for you.
+                    writer.WriteLine("!This is my comment.");
+
+                    // Iterate through the universe one row at a time.
+                    for (int y = 0; y < universe.GetLength(1); y++) //Height
+                    {
+                        // Create a string to represent the current row.
+                        String currentRow = string.Empty;
+
+                        // Iterate through the current row one cell at a time.
+                        for (int x = 0; x < universe.GetLength(0); x++) //width
+                        {
+                            // If the universe[x,y] is alive then append 'O' (capital O)
+                            // to the row string.
+
+                            if (universe[x, y] == true)
+                            {
+                                currentRow += 'O';
+                            }
+                            // Else if the universe[x,y] is dead then append '.' (period)
+                            // to the row string.
+                            else
+                            {
+                                currentRow += '.';
+                            }
+
+
+                        }
+
+                        // Once the current row has been read through and the 
+                        // string constructed then write it to the file using WriteLine.
+
+                        writer.WriteLine(currentRow);
+                    }
+
+                    // After all rows and columns have been written then close the file.
+                    writer.Close();
+                }
             }
         }
 
+        string CurrentFile = null;
+
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.Filter = "All Files|*.*|Cells|*.cells";
-            dlg.FilterIndex = 2; dlg.DefaultExt = "cells";
 
 
-            if (DialogResult.OK == dlg.ShowDialog())
+            if (File.Exists(CurrentFile))
             {
-                StreamWriter writer = new StreamWriter(dlg.FileName);
+                StreamWriter writer = new StreamWriter(CurrentFile);
 
                 // Write any comments you want to include first.
                 // Prefix all comment strings with an exclamation point.
                 // Use WriteLine to write the strings to the file. 
                 // It appends a CRLF for you.
-                writer.WriteLine("!This is my comment.");
+                writer.WriteLine("!HAVE A GREAT DAY!");
 
                 // Iterate through the universe one row at a time.
                 for (int y = 0; y < universe.GetLength(1); y++) //Height
@@ -550,13 +601,128 @@ namespace GameOfLifePortfolio
 
                 // After all rows and columns have been written then close the file.
                 writer.Close();
+
             }
-        } //Functions as a SaveAs. needs to be just a save
+            else
+            {
+                SaveFileDialog dlg = new SaveFileDialog();
+                dlg.Filter = "All Files|*.*|Cells|*.cells";
+                dlg.FilterIndex = 2; dlg.DefaultExt = "cells";
+                if (DialogResult.OK == dlg.ShowDialog())
+                {
+                    CurrentFile = dlg.FileName;
+                    StreamWriter writer = new StreamWriter(dlg.FileName);
+
+                    // Write any comments you want to include first.
+                    // Prefix all comment strings with an exclamation point.
+                    // Use WriteLine to write the strings to the file. 
+                    // It appends a CRLF for you.
+                    writer.WriteLine("!This is my comment.");
+
+                    // Iterate through the universe one row at a time.
+                    for (int y = 0; y < universe.GetLength(1); y++) //Height
+                    {
+                        // Create a string to represent the current row.
+                        String currentRow = string.Empty;
+
+                        // Iterate through the current row one cell at a time.
+                        for (int x = 0; x < universe.GetLength(0); x++) //width
+                        {
+                            // If the universe[x,y] is alive then append 'O' (capital O)
+                            // to the row string.
+
+                            if (universe[x, y] == true)
+                            {
+                                currentRow += 'O';
+                            }
+                            // Else if the universe[x,y] is dead then append '.' (period)
+                            // to the row string.
+                            else
+                            {
+                                currentRow += '.';
+                            }
+
+
+                        }
+
+                        // Once the current row has been read through and the 
+                        // string constructed then write it to the file using WriteLine.
+
+                        writer.WriteLine(currentRow);
+                    }
+
+                    // After all rows and columns have been written then close the file.
+                    writer.Close();
+                }
+            }
+
+
+
+        }
 
         private void openToolStripButton_Click(object sender, EventArgs e)
         {
             LoadFile();
-            graphicsPanel1.Invalidate();
+
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadFile();
+
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.Filter = "All Files|*.*|Cells|*.cells";
+            dlg.FilterIndex = 2; dlg.DefaultExt = "cells";
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                CurrentFile = dlg.FileName;
+                StreamWriter writer = new StreamWriter(dlg.FileName);
+
+                // Write any comments you want to include first.
+                // Prefix all comment strings with an exclamation point.
+                // Use WriteLine to write the strings to the file. 
+                // It appends a CRLF for you.
+                writer.WriteLine("!This is my comment.");
+
+                // Iterate through the universe one row at a time.
+                for (int y = 0; y < universe.GetLength(1); y++) //Height
+                {
+                    // Create a string to represent the current row.
+                    String currentRow = string.Empty;
+
+                    // Iterate through the current row one cell at a time.
+                    for (int x = 0; x < universe.GetLength(0); x++) //width
+                    {
+                        // If the universe[x,y] is alive then append 'O' (capital O)
+                        // to the row string.
+
+                        if (universe[x, y] == true)
+                        {
+                            currentRow += 'O';
+                        }
+                        // Else if the universe[x,y] is dead then append '.' (period)
+                        // to the row string.
+                        else
+                        {
+                            currentRow += '.';
+                        }
+
+
+                    }
+
+                    // Once the current row has been read through and the 
+                    // string constructed then write it to the file using WriteLine.
+
+                    writer.WriteLine(currentRow);
+                }
+
+                // After all rows and columns have been written then close the file.
+                writer.Close();
+            }
         }
     }
 }
