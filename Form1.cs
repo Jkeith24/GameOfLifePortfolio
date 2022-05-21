@@ -17,8 +17,6 @@ namespace GameOfLifePortfolio
         bool[,] scratchPad = new bool[20, 20];
 
 
-
-
         // Drawing colors
         Color gridColor = Color.Black;
         Color cellColor = Color.Gray;
@@ -37,6 +35,12 @@ namespace GameOfLifePortfolio
             timer.Interval = 100; // milliseconds
             timer.Tick += Timer_Tick;
             timer.Enabled = false; // start timer running
+
+            //Reading the properties
+            graphicsPanel1.BackColor = Properties.Settings.Default.PanelColor;
+            
+            
+
         }
 
         // Calculate the next generation of cells
@@ -65,7 +69,6 @@ namespace GameOfLifePortfolio
                         {
                             scratchPad[x, y] = true;
                         }
-
                     }
                     else
                     {
@@ -79,15 +82,9 @@ namespace GameOfLifePortfolio
                             scratchPad[x, y] = false;
                         }
                     }
-
-
                     //Turn it on/off in the scratchpad
 
-
-
                 }
-
-
             }
 
             //Copy from scratchPad to universe. Code is in Miscellaneous How tos
@@ -117,15 +114,15 @@ namespace GameOfLifePortfolio
 
             // Calculate the width and height of each cell in pixels
             // CELL WIDTH = WINDOW WIDTH / NUMBER OF CELLS IN X
-            int cellWidth = graphicsPanel1.ClientSize.Width / universe.GetLength(0);
+            float cellWidth = graphicsPanel1.ClientSize.Width / universe.GetLength(0);
             // CELL HEIGHT = WINDOW HEIGHT / NUMBER OF CELLS IN Y
-            int cellHeight = graphicsPanel1.ClientSize.Height / universe.GetLength(1);
+            float cellHeight = graphicsPanel1.ClientSize.Height / universe.GetLength(1);
 
             // A Pen for drawing the grid lines (color, width)
             Pen gridPen = new Pen(gridColor, 1);
 
             // A Brush for filling living cells interiors (color)
-            Brush cellBrush = new SolidBrush(cellColor);
+            Brush cellBrush = new SolidBrush(Properties.Settings.Default.PanelCellColor);
 
             // Iterate through the universe in the y, top to bottom
             for (int y = 0; y < universe.GetLength(1); y++)
@@ -137,11 +134,18 @@ namespace GameOfLifePortfolio
 
                     //RectangleF ---> converts to float
 
-                    Rectangle cellRect = Rectangle.Empty;
+                    //Rectangle cellRect = Rectangle.Empty;
+                    //cellRect.X = x * cellWidth;
+                    //cellRect.Y = y * cellHeight;
+                    //cellRect.Width = cellWidth;
+                    //cellRect.Height = cellHeight;
+
+                    RectangleF cellRect = RectangleF.Empty;                    
                     cellRect.X = x * cellWidth;
                     cellRect.Y = y * cellHeight;
                     cellRect.Width = cellWidth;
                     cellRect.Height = cellHeight;
+
 
                     // Fill the cell with a brush if alive
                     if (universe[x, y] == true)
@@ -151,8 +155,9 @@ namespace GameOfLifePortfolio
 
                     // Outline the cell with a pen
                     e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                    
 
-                    Rectangle rect = new Rectangle(cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
+                    RectangleF rect = new RectangleF(cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
 
                     Font font = new Font("Arial", 13f);
 
@@ -173,8 +178,6 @@ namespace GameOfLifePortfolio
 
                 }
             }
-
-
 
             // Cleaning up pens and brushes
             gridPen.Dispose();
@@ -511,7 +514,7 @@ namespace GameOfLifePortfolio
                     // Prefix all comment strings with an exclamation point.
                     // Use WriteLine to write the strings to the file. 
                     // It appends a CRLF for you.
-                    writer.WriteLine("!This is my comment.");
+                    writer.WriteLine("!HAVE A GREAT DAY!.");
 
                     // Iterate through the universe one row at a time.
                     for (int y = 0; y < universe.GetLength(1); y++) //Height
@@ -722,6 +725,65 @@ namespace GameOfLifePortfolio
 
                 // After all rows and columns have been written then close the file.
                 writer.Close();
+            }
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    universe[x, y] = false;
+                    generations = 0;
+                    timer.Enabled = false;
+                    toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+
+                }
+            }
+
+            CurrentFile = null;
+            graphicsPanel1.Invalidate();
+
+        }
+
+        private void customizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void colorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog dlg = new ColorDialog();
+
+            dlg.Color = graphicsPanel1.BackColor;
+
+            if(DialogResult.OK == dlg.ShowDialog())
+            {
+                graphicsPanel1.BackColor = dlg.Color;
+            }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //Updating the property
+            Properties.Settings.Default.PanelColor = graphicsPanel1.BackColor;
+            //saves the properties
+            Properties.Settings.Default.Save();
+            
+        }
+
+        private void cellColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog dlg = new ColorDialog();
+
+            dlg.Color = graphicsPanel1.BackColor;
+
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                Properties.Settings.Default.PanelCellColor = dlg.Color;
+                graphicsPanel1.Invalidate();
             }
         }
     }
