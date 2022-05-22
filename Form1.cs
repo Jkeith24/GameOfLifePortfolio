@@ -786,5 +786,21 @@ namespace GameOfLifePortfolio
                 graphicsPanel1.Invalidate();
             }
         }
+
+        private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reload();
+
+            //Reading the property
+            graphicsPanel1.BackColor = Properties.Settings.Default.PanelColor;
+        }
+
+        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+
+            //Reading the property
+            graphicsPanel1.BackColor = Properties.Settings.Default.PanelColor;
+        }
     }
 }
