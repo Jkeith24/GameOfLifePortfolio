@@ -61,13 +61,37 @@ namespace GameOfLifePortfolio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Gold")]
         public global::System.Drawing.Color PanelCellColor {
             get {
                 return ((global::System.Drawing.Color)(this["PanelCellColor"]));
             }
             set {
                 this["PanelCellColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Black")]
+        public global::System.Drawing.Color PanelGridColor {
+            get {
+                return ((global::System.Drawing.Color)(this["PanelGridColor"]));
+            }
+            set {
+                this["PanelGridColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string g {
+            get {
+                return ((string)(this["g"]));
+            }
+            set {
+                this["g"] = value;
             }
         }
     }

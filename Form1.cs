@@ -38,8 +38,8 @@ namespace GameOfLifePortfolio
 
             //Reading the properties
             graphicsPanel1.BackColor = Properties.Settings.Default.PanelColor;
-            
-            
+
+
 
         }
 
@@ -119,7 +119,7 @@ namespace GameOfLifePortfolio
             float cellHeight = graphicsPanel1.ClientSize.Height / universe.GetLength(1);
 
             // A Pen for drawing the grid lines (color, width)
-            Pen gridPen = new Pen(gridColor, 1);
+            Pen gridPen = new Pen(Properties.Settings.Default.PanelGridColor, 1);
 
             // A Brush for filling living cells interiors (color)
             Brush cellBrush = new SolidBrush(Properties.Settings.Default.PanelCellColor);
@@ -140,7 +140,7 @@ namespace GameOfLifePortfolio
                     //cellRect.Width = cellWidth;
                     //cellRect.Height = cellHeight;
 
-                    RectangleF cellRect = RectangleF.Empty;                    
+                    RectangleF cellRect = RectangleF.Empty;
                     cellRect.X = x * cellWidth;
                     cellRect.Y = y * cellHeight;
                     cellRect.Width = cellWidth;
@@ -155,7 +155,7 @@ namespace GameOfLifePortfolio
 
                     // Outline the cell with a pen
                     e.Graphics.DrawRectangle(gridPen, cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
-                    
+
 
                     RectangleF rect = new RectangleF(cellRect.X, cellRect.Y, cellRect.Width, cellRect.Height);
 
@@ -759,7 +759,7 @@ namespace GameOfLifePortfolio
 
             dlg.Color = graphicsPanel1.BackColor;
 
-            if(DialogResult.OK == dlg.ShowDialog())
+            if (DialogResult.OK == dlg.ShowDialog())
             {
                 graphicsPanel1.BackColor = dlg.Color;
             }
@@ -771,7 +771,7 @@ namespace GameOfLifePortfolio
             Properties.Settings.Default.PanelColor = graphicsPanel1.BackColor;
             //saves the properties
             Properties.Settings.Default.Save();
-            
+
         }
 
         private void cellColorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -801,6 +801,75 @@ namespace GameOfLifePortfolio
 
             //Reading the property
             graphicsPanel1.BackColor = Properties.Settings.Default.PanelColor;
+        }
+
+        private void gridColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog dlg = new ColorDialog();
+
+            dlg.Color = graphicsPanel1.BackColor;
+
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                Properties.Settings.Default.PanelGridColor = dlg.Color;
+                graphicsPanel1.Invalidate();
+            }
+        }
+
+        private void Randomize()
+        {
+            Random rand = new Random(); // Time
+
+            //clear universe before randomizing
+
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    universe[x, y] = false;
+                }
+            }
+
+
+            //filling the universe randomly
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    
+
+                    int num = rand.Next(0, 3);
+
+
+                    //if random number is == 0 turn on
+                    if (num == 0)
+                    {
+                        universe[x, y] = true;
+                    }
+
+
+                }
+            }
+
+            //invalidate
+            graphicsPanel1.Invalidate();
+        }
+
+        private void RandomizeSeed()
+        {
+            
+        }
+
+        private void fromTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Randomize();
+        }
+
+        private void fromSeedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
