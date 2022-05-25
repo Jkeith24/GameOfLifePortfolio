@@ -85,13 +85,25 @@ namespace GameOfLifePortfolio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string g {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int RandomSeed {
             get {
-                return ((string)(this["g"]));
+                return ((int)(this["RandomSeed"]));
             }
             set {
-                this["g"] = value;
+                this["RandomSeed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TimerInterval {
+            get {
+                return ((int)(this["TimerInterval"]));
+            }
+            set {
+                this["TimerInterval"] = value;
             }
         }
     }

@@ -16,6 +16,8 @@ namespace GameOfLifePortfolio
         bool[,] universe = new bool[20, 20];
         bool[,] scratchPad = new bool[20, 20];
 
+        public static int TimerInterval = 100;
+
 
         // Drawing colors
         Color gridColor = Color.Black;
@@ -32,7 +34,7 @@ namespace GameOfLifePortfolio
             InitializeComponent();
 
             // Setup the timer
-            timer.Interval = 100; // milliseconds
+            timer.Interval = Properties.Settings.Default.TimerInterval; // milliseconds
             timer.Tick += Timer_Tick;
             timer.Enabled = false; // start timer running
 
@@ -43,14 +45,27 @@ namespace GameOfLifePortfolio
 
         }
 
+        
+
         // Calculate the next generation of cells
         private void NextGeneration()
         {
+
+
+                int aliveCells = 0;
+
             for (int y = 0; y < universe.GetLength(1); y++)
             {
                 // Iterate through the universe in the x, left to right
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
+
+                    //counting alive cells
+                    if(universe[x,y] == true)
+                    {
+                        aliveCells++;
+                    }
+
 
                     // int count = CountNeighborsFinite(x, y);
 
@@ -94,8 +109,12 @@ namespace GameOfLifePortfolio
             // Increment generation count
             generations++;
 
-            // Update status strip generations
+            // Update status strip 
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            IntervalStatus.Text = "Interval: " + Properties.Settings.Default.TimerInterval;
+            SeedStatus.Text = "Seed: " + Properties.Settings.Default.RandomSeed;
+            AliveCellStatus.Text = "Alive Cells: " + aliveCells;
+
 
             //Add invalidate here
             graphicsPanel1.Invalidate();
@@ -105,6 +124,7 @@ namespace GameOfLifePortfolio
         private void Timer_Tick(object sender, EventArgs e)
         {
             NextGeneration();
+           
         }
 
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
@@ -769,6 +789,7 @@ namespace GameOfLifePortfolio
         {
             //Updating the property
             Properties.Settings.Default.PanelColor = graphicsPanel1.BackColor;
+            //Properties.Settings.Default.TimerInterval = TimerInterval;
             //saves the properties
             Properties.Settings.Default.Save();
 
@@ -820,16 +841,7 @@ namespace GameOfLifePortfolio
         {
             Random rand = new Random(); // Time
 
-            //clear universe before randomizing
-
-            for (int y = 0; y < universe.GetLength(1); y++)
-            {
-                // Iterate through the universe in the x, left to right
-                for (int x = 0; x < universe.GetLength(0); x++)
-                {
-                    universe[x, y] = false;
-                }
-            }
+           
 
 
             //filling the universe randomly
@@ -842,11 +854,14 @@ namespace GameOfLifePortfolio
 
                     int num = rand.Next(0, 3);
 
-
                     //if random number is == 0 turn on
                     if (num == 0)
                     {
                         universe[x, y] = true;
+                    }
+                    else
+                    {
+                        universe[x, y] = false;
                     }
 
 
@@ -857,9 +872,38 @@ namespace GameOfLifePortfolio
             graphicsPanel1.Invalidate();
         }
 
-        private void RandomizeSeed()
+        public void RandomizeSeed()
         {
-            
+            Random ran = new Random(Properties.Settings.Default.RandomSeed);
+
+
+            //filling the universe randomly
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+
+
+                    int num = ran.Next(0, 3);
+
+                    //if random number is == 0 turn on
+                    if (num == 0)
+                    {
+                        universe[x, y] = true;
+                    }
+                    else
+                    {
+                        universe[x, y] = false;
+                    }
+
+
+                }
+            }
+
+            //invalidate
+            graphicsPanel1.Invalidate();
+
         }
 
         private void fromTimeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -867,9 +911,32 @@ namespace GameOfLifePortfolio
             Randomize();
         }
 
+
+
         private void fromSeedToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Form2 randomSeed = new Form2();
+
+            if (DialogResult.OK == randomSeed.ShowDialog())
+            {
+                RandomizeSeed();
+                
+            }
+            
 
         }
+
+        private void timerIntervalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TimerInterval timer1 = new TimerInterval();
+
+            timer1.ShowDialog();
+
+            timer.Interval = TimerInterval;
+
+            Properties.Settings.Default.TimerInterval = TimerInterval;
+        }
+
+        
     }
 }

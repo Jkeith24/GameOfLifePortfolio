@@ -50,6 +50,7 @@ namespace GameOfLifePortfolio
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.optionsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.timerIntervalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.randomizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,12 +71,15 @@ namespace GameOfLifePortfolio
             this.PlayButton = new System.Windows.Forms.ToolStripButton();
             this.PauseButton = new System.Windows.Forms.ToolStripButton();
             this.NextGenButton = new System.Windows.Forms.ToolStripButton();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.AliveCellStatus = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelGenerations = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.IntervalStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.SeedStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.graphicsPanel1 = new GameOfLifePortfolio.GraphicsPanel();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
+            this.AliveCellStatus.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -194,6 +198,7 @@ namespace GameOfLifePortfolio
             this.toolStripSeparator3,
             this.optionsToolStripMenuItem2,
             this.toolStripSeparator4,
+            this.timerIntervalToolStripMenuItem,
             this.reloadToolStripMenuItem,
             this.resetToolStripMenuItem});
             this.optionsToolStripMenuItem1.Name = "optionsToolStripMenuItem1";
@@ -243,6 +248,13 @@ namespace GameOfLifePortfolio
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(146, 6);
             // 
+            // timerIntervalToolStripMenuItem
+            // 
+            this.timerIntervalToolStripMenuItem.Name = "timerIntervalToolStripMenuItem";
+            this.timerIntervalToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.timerIntervalToolStripMenuItem.Text = "Timer Interval";
+            this.timerIntervalToolStripMenuItem.Click += new System.EventHandler(this.timerIntervalToolStripMenuItem_Click);
+            // 
             // reloadToolStripMenuItem
             // 
             this.reloadToolStripMenuItem.Name = "reloadToolStripMenuItem";
@@ -269,14 +281,14 @@ namespace GameOfLifePortfolio
             // fromSeedToolStripMenuItem
             // 
             this.fromSeedToolStripMenuItem.Name = "fromSeedToolStripMenuItem";
-            this.fromSeedToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fromSeedToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.fromSeedToolStripMenuItem.Text = "From Seed";
             this.fromSeedToolStripMenuItem.Click += new System.EventHandler(this.fromSeedToolStripMenuItem_Click);
             // 
             // fromTimeToolStripMenuItem
             // 
             this.fromTimeToolStripMenuItem.Name = "fromTimeToolStripMenuItem";
-            this.fromTimeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.fromTimeToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
             this.fromTimeToolStripMenuItem.Text = "From Time";
             this.fromTimeToolStripMenuItem.Click += new System.EventHandler(this.fromTimeToolStripMenuItem_Click);
             // 
@@ -408,21 +420,42 @@ namespace GameOfLifePortfolio
             this.NextGenButton.Text = "Next Generation";
             this.NextGenButton.Click += new System.EventHandler(this.NextGenButton_Click);
             // 
-            // statusStrip1
+            // AliveCellStatus
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabelGenerations});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 503);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(950, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
+            this.AliveCellStatus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelGenerations,
+            this.toolStripStatusLabel1,
+            this.IntervalStatus,
+            this.SeedStatus});
+            this.AliveCellStatus.Location = new System.Drawing.Point(0, 503);
+            this.AliveCellStatus.Name = "AliveCellStatus";
+            this.AliveCellStatus.Size = new System.Drawing.Size(950, 22);
+            this.AliveCellStatus.TabIndex = 2;
+            this.AliveCellStatus.Text = "statusStrip1";
             // 
             // toolStripStatusLabelGenerations
             // 
             this.toolStripStatusLabelGenerations.Name = "toolStripStatusLabelGenerations";
-            this.toolStripStatusLabelGenerations.Size = new System.Drawing.Size(90, 17);
-            this.toolStripStatusLabelGenerations.Text = "Generations = 0";
+            this.toolStripStatusLabelGenerations.Size = new System.Drawing.Size(73, 17);
+            this.toolStripStatusLabelGenerations.Text = "Generations:";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(64, 17);
+            this.toolStripStatusLabel1.Text = "Alive Cells:";
+            // 
+            // IntervalStatus
+            // 
+            this.IntervalStatus.Name = "IntervalStatus";
+            this.IntervalStatus.Size = new System.Drawing.Size(49, 17);
+            this.IntervalStatus.Text = "Interval:";
+            // 
+            // SeedStatus
+            // 
+            this.SeedStatus.Name = "SeedStatus";
+            this.SeedStatus.Size = new System.Drawing.Size(38, 17);
+            this.SeedStatus.Text = "Seed: ";
             // 
             // graphicsPanel1
             // 
@@ -441,7 +474,7 @@ namespace GameOfLifePortfolio
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(950, 525);
             this.Controls.Add(this.graphicsPanel1);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.AliveCellStatus);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -452,8 +485,8 @@ namespace GameOfLifePortfolio
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            this.AliveCellStatus.ResumeLayout(false);
+            this.AliveCellStatus.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -463,7 +496,7 @@ namespace GameOfLifePortfolio
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip AliveCellStatus;
         private GraphicsPanel graphicsPanel1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -504,6 +537,10 @@ namespace GameOfLifePortfolio
         private System.Windows.Forms.ToolStripMenuItem fromTimeToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem timerIntervalToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel IntervalStatus;
+        private System.Windows.Forms.ToolStripStatusLabel SeedStatus;
     }
 }
 
