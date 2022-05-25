@@ -5,11 +5,11 @@
     <Setting Name="PanelColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Fuchsia</Value>
     </Setting>
-    <Setting Name="PanelHeight" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+    <Setting Name="UniverseHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">20</Value>
     </Setting>
-    <Setting Name="PanelWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+    <Setting Name="UniverseWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="PanelCellColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">Gold</Value>
@@ -21,7 +21,10 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="TimerInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="ShowNumbers" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

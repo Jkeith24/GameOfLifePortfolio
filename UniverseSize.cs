@@ -10,17 +10,17 @@ using System.Windows.Forms;
 
 namespace GameOfLifePortfolio
 {
-    public partial class TimerInterval : Form
+    public partial class UniverseSize : Form
     {
-        public TimerInterval()
+        public UniverseSize()
         {
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void OKButton_Click(object sender, EventArgs e)
         {
-            MainWindow.TimerInterval = (int)Interval.Value;
-            this.Close();
+            Properties.Settings.Default.UniverseHeight = (int) HeightVal.Value;
+            Properties.Settings.Default.UniverseWidth = (int)WidthVal.Value;
         }
 
         private void CancelButton_Click(object sender, EventArgs e)

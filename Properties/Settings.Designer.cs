@@ -37,25 +37,25 @@ namespace GameOfLifePortfolio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int PanelHeight {
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int UniverseHeight {
             get {
-                return ((int)(this["PanelHeight"]));
+                return ((int)(this["UniverseHeight"]));
             }
             set {
-                this["PanelHeight"] = value;
+                this["UniverseHeight"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int PanelWidth {
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        public int UniverseWidth {
             get {
-                return ((int)(this["PanelWidth"]));
+                return ((int)(this["UniverseWidth"]));
             }
             set {
-                this["PanelWidth"] = value;
+                this["UniverseWidth"] = value;
             }
         }
         
@@ -97,13 +97,25 @@ namespace GameOfLifePortfolio.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
         public int TimerInterval {
             get {
                 return ((int)(this["TimerInterval"]));
             }
             set {
                 this["TimerInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowNumbers {
+            get {
+                return ((bool)(this["ShowNumbers"]));
+            }
+            set {
+                this["ShowNumbers"] = value;
             }
         }
     }

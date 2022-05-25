@@ -11,10 +11,10 @@ using System.Windows.Forms;
 
 namespace GameOfLifePortfolio
 {
-    public partial class Form1 : Form
+    public partial class MainWindow : Form
     {
-        bool[,] universe = new bool[20, 20];
-        bool[,] scratchPad = new bool[20, 20];
+        bool[,] universe = new bool[ Properties.Settings.Default.UniverseWidth,Properties.Settings.Default.UniverseHeight];
+        bool[,] scratchPad = new bool[Properties.Settings.Default.UniverseWidth, Properties.Settings.Default.UniverseHeight];
 
         public static int TimerInterval = 100;
 
@@ -29,7 +29,7 @@ namespace GameOfLifePortfolio
         // Generation count
         int generations = 0;
 
-        public Form1()
+        public MainWindow()
         {
             InitializeComponent();
 
@@ -127,6 +127,7 @@ namespace GameOfLifePortfolio
 
         }
 
+        
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
             //FLOATS! MAKES THE PROGRAM LOOK A LOT BETTER
@@ -181,14 +182,22 @@ namespace GameOfLifePortfolio
 
                     stringFormat.LineAlignment = StringAlignment.Center;
 
-                    int temp = CountNeighborsFinite(x, y);
 
-                    if (temp != 0)
+                    //checking to see if user wants to see the counts
+                    if (Properties.Settings.Default.ShowNumbers)
                     {
-                        e.Graphics.DrawString(temp.ToString(), font, Brushes.Blue, rect, stringFormat);
 
+
+                        int temp = CountNeighborsFinite(x, y);
+
+                        if (temp != 0)
+                        {
+                            e.Graphics.DrawString(temp.ToString(), font, Brushes.Blue, rect, stringFormat);
+
+                        }
+                        temp = 0;
                     }
-                    temp = 0;
+                   
 
                 }
             }
@@ -279,6 +288,7 @@ namespace GameOfLifePortfolio
            
             return count;
         }
+
 
         private int CountNeighborsFinite(int x, int y)
         {
@@ -912,14 +922,13 @@ namespace GameOfLifePortfolio
 
         private void fromSeedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form2 randomSeed = new Form2();
+            RandomSeed randomSeed = new RandomSeed();
 
             if (DialogResult.OK == randomSeed.ShowDialog())
             {
                 RandomizeSeed();
 
             }
-
 
         }
 
@@ -932,8 +941,28 @@ namespace GameOfLifePortfolio
             timer.Interval = TimerInterval;
 
             Properties.Settings.Default.TimerInterval = TimerInterval;
+
+            graphicsPanel1.Invalidate();
         }
 
+        private void neighborCountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.ShowNumbers = !Properties.Settings.Default.ShowNumbers;
 
+            graphicsPanel1.Invalidate();
+        }
+
+        private void SizeOfUniverse_Click(object sender, EventArgs e)
+        {
+            UniverseSize universeSize = new UniverseSize();
+
+            if (DialogResult.OK == universeSize.ShowDialog())
+            {
+                universe = new bool[Properties.Settings.Default.UniverseWidth, Properties.Settings.Default.UniverseHeight];
+                scratchPad = new bool[Properties.Settings.Default.UniverseWidth, Properties.Settings.Default.UniverseHeight];
+
+                graphicsPanel1.Invalidate();
+            }
+        }
     }
 }

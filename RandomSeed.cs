@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace GameOfLifePortfolio
 {
-    public partial class Form2 : Form
+    public partial class RandomSeed : Form
     {
-        public Form2()
+        public RandomSeed()
         {
             InitializeComponent();
         }

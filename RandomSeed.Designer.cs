@@ -1,7 +1,7 @@
 ﻿
 namespace GameOfLifePortfolio
 {
-    partial class Form2
+    partial class RandomSeed
     {
         /// <summary>
         /// Required designer variable.
