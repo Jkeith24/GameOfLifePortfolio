@@ -32,6 +32,7 @@ namespace GameOfLifePortfolio
             this.Tinterval = new System.Windows.Forms.Button();
             this.Interval = new System.Windows.Forms.NumericUpDown();
             this.TimerLabel = new System.Windows.Forms.Label();
+            this.CancelButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Interval)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,12 +68,23 @@ namespace GameOfLifePortfolio
             this.TimerLabel.TabIndex = 2;
             this.TimerLabel.Text = "Timer interval milliseconds";
             // 
+            // CancelButton
+            // 
+            this.CancelButton.Location = new System.Drawing.Point(90, 202);
+            this.CancelButton.Name = "CancelButton";
+            this.CancelButton.Size = new System.Drawing.Size(75, 23);
+            this.CancelButton.TabIndex = 3;
+            this.CancelButton.Text = "Cancel";
+            this.CancelButton.UseVisualStyleBackColor = true;
+            this.CancelButton.Click += new System.EventHandler(this.CancelButton_Click);
+            // 
             // TimerInterval
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(261, 258);
             this.ControlBox = false;
+            this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.TimerLabel);
             this.Controls.Add(this.Interval);
             this.Controls.Add(this.Tinterval);
@@ -91,5 +103,6 @@ namespace GameOfLifePortfolio
         private System.Windows.Forms.Button Tinterval;
         private System.Windows.Forms.NumericUpDown Interval;
         private System.Windows.Forms.Label TimerLabel;
+        private System.Windows.Forms.Button CancelButton;
     }
 }

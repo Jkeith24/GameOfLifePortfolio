@@ -45,14 +45,14 @@ namespace GameOfLifePortfolio
 
         }
 
-        
+
 
         // Calculate the next generation of cells
         private void NextGeneration()
         {
 
 
-                int aliveCells = 0;
+            int aliveCells = 0;
 
             for (int y = 0; y < universe.GetLength(1); y++)
             {
@@ -60,8 +60,8 @@ namespace GameOfLifePortfolio
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
 
-                    //counting alive cells
-                    if(universe[x,y] == true)
+                   // counting alive cells
+                    if (universe[x, y] == true)
                     {
                         aliveCells++;
                     }
@@ -113,7 +113,7 @@ namespace GameOfLifePortfolio
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
             IntervalStatus.Text = "Interval: " + Properties.Settings.Default.TimerInterval;
             SeedStatus.Text = "Seed: " + Properties.Settings.Default.RandomSeed;
-            AliveCellStatus.Text = "Alive Cells: " + aliveCells;
+            AliveCellsStatus.Text = "Alive Cells: " + aliveCells;
 
 
             //Add invalidate here
@@ -124,7 +124,7 @@ namespace GameOfLifePortfolio
         private void Timer_Tick(object sender, EventArgs e)
         {
             NextGeneration();
-           
+
         }
 
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
@@ -153,12 +153,6 @@ namespace GameOfLifePortfolio
                     // A rectangle to represent each cell in pixels
 
                     //RectangleF ---> converts to float
-
-                    //Rectangle cellRect = Rectangle.Empty;
-                    //cellRect.X = x * cellWidth;
-                    //cellRect.Y = y * cellHeight;
-                    //cellRect.Width = cellWidth;
-                    //cellRect.Height = cellHeight;
 
                     RectangleF cellRect = RectangleF.Empty;
                     cellRect.X = x * cellWidth;
@@ -233,6 +227,7 @@ namespace GameOfLifePortfolio
             int count = 0;
             int xLen = universe.GetLength(0);
             int yLen = universe.GetLength(1);
+        
 
             for (int yOffset = -1; yOffset <= 1; yOffset++)
             {
@@ -241,6 +236,7 @@ namespace GameOfLifePortfolio
                     int xCheck = x + xOffset;
                     int yCheck = y + yOffset;
 
+                   
 
                     // if xOffset and yOffset are both equal to 0 then continue
 
@@ -280,6 +276,7 @@ namespace GameOfLifePortfolio
                     if (universe[xCheck, yCheck] == true) count++;
                 }
             }
+           
             return count;
         }
 
@@ -841,7 +838,7 @@ namespace GameOfLifePortfolio
         {
             Random rand = new Random(); // Time
 
-           
+
 
 
             //filling the universe randomly
@@ -850,7 +847,7 @@ namespace GameOfLifePortfolio
                 // Iterate through the universe in the x, left to right
                 for (int x = 0; x < universe.GetLength(0); x++)
                 {
-                    
+
 
                     int num = rand.Next(0, 3);
 
@@ -920,9 +917,9 @@ namespace GameOfLifePortfolio
             if (DialogResult.OK == randomSeed.ShowDialog())
             {
                 RandomizeSeed();
-                
+
             }
-            
+
 
         }
 
@@ -937,6 +934,6 @@ namespace GameOfLifePortfolio
             Properties.Settings.Default.TimerInterval = TimerInterval;
         }
 
-        
+
     }
 }

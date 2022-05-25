@@ -73,7 +73,7 @@ namespace GameOfLifePortfolio
             this.NextGenButton = new System.Windows.Forms.ToolStripButton();
             this.AliveCellStatus = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelGenerations = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.AliveCellsStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.IntervalStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.SeedStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.graphicsPanel1 = new GameOfLifePortfolio.GraphicsPanel();
@@ -424,7 +424,7 @@ namespace GameOfLifePortfolio
             // 
             this.AliveCellStatus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelGenerations,
-            this.toolStripStatusLabel1,
+            this.AliveCellsStatus,
             this.IntervalStatus,
             this.SeedStatus});
             this.AliveCellStatus.Location = new System.Drawing.Point(0, 503);
@@ -439,11 +439,11 @@ namespace GameOfLifePortfolio
             this.toolStripStatusLabelGenerations.Size = new System.Drawing.Size(73, 17);
             this.toolStripStatusLabelGenerations.Text = "Generations:";
             // 
-            // toolStripStatusLabel1
+            // AliveCellsStatus
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(64, 17);
-            this.toolStripStatusLabel1.Text = "Alive Cells:";
+            this.AliveCellsStatus.Name = "AliveCellsStatus";
+            this.AliveCellsStatus.Size = new System.Drawing.Size(64, 17);
+            this.AliveCellsStatus.Text = "Alive Cells:";
             // 
             // IntervalStatus
             // 
@@ -538,7 +538,7 @@ namespace GameOfLifePortfolio
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem timerIntervalToolStripMenuItem;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel AliveCellsStatus;
         private System.Windows.Forms.ToolStripStatusLabel IntervalStatus;
         private System.Windows.Forms.ToolStripStatusLabel SeedStatus;
     }

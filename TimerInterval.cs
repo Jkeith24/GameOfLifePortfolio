@@ -22,5 +22,10 @@ namespace GameOfLifePortfolio
             Form1.TimerInterval = (int)Interval.Value;
             this.Close();
         }
+
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
